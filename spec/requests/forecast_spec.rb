@@ -1,8 +1,8 @@
 require 'rails_helper'
 require 'date'
 
-describe 'Geocoding Requests' do
-  describe 'obtains forecasts' do
+describe 'Forecast Requests' do
+  describe 'obtains forecast' do
     it 'can obtain forecast information' do
       VCR.use_cassette('Denver,CO') do
         get api_v1_forecasts_path, params: {location: "Denver,CO"}
@@ -11,6 +11,19 @@ describe 'Geocoding Requests' do
 
         require "pry"; binding.pry
         expect(response).to be_successful
+
+        expect(forecast).not_to have_key(forecast[:minutely])
+        expect(forecast).not_to have_key(forecast[:lat])
+        expect(forecast).not_to have_key(forecast[:lon])
+        expect(forecast).not_to have_key(forecast[:timezone])
+        expect(forecast).not_to have_key(forecast[:timezone_offset])
+        expect(forecast).not_to have_key(forecast[:current_weather][:pressure])
+        expect(forecast).not_to have_key(forecast[:current_weather][:dew_point])
+        expect(forecast).not_to have_key(forecast[:current_weather][:clouds])
+        expect(forecast).not_to have_key(forecast[:current_weather][:wind_speed])
+        expect(forecast).not_to have_key(forecast[:current_weather][:wind_deg])
+        expect(forecast).not_to have_key(forecast[:current_weather][:wind_gust])
+
 
         expect(forecast).to be_a(Hash)
         expect(forecast.length).to eq(1)
@@ -58,7 +71,6 @@ describe 'Geocoding Requests' do
         expect(forecast[:data][:attributes][:daily_weather].length).to eq(5)
 
         forecast[:data][:attributes][:daily_weather].each do |day|
-          # require "pry"; binding.pry
           expect(day).to have_key(:date)
           expect(day[:date]).to be_a(String)
           expect(Date.strptime(day[:date], '%m-%d-%Y')).to be_a(Date)
@@ -77,6 +89,20 @@ describe 'Geocoding Requests' do
           expect(day).to have_key(:icon)
           expect(day[:icon]).to be_a(String)
         end
+
+        forecast[:data][:attributes][:hourly_weather].each do |hour|
+          expect(hour).to have_key(:time)
+          expect(hour[:time]).to be_a(String)
+          expect(Time.parse(hour[:time]).class).to be(Time)
+          expect(hour).to have_key(:temp)
+          expect(hour[:temp]).to be_a(Float)
+          expect(hour).to have_key(:description)
+          expect(hour[:description]).to be_a(String)
+          expect(hour).to have_key(:icon)
+          expect(hour[:icon]).to be_a(String)
+        end
+
+
       end
     end
   end
