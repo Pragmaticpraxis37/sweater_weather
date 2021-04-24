@@ -1,4 +1,5 @@
 require 'rails_helper'
+require 'date'
 
 describe 'Geocoding Requests' do
   describe 'obtains forecasts' do
@@ -26,6 +27,8 @@ describe 'Geocoding Requests' do
         expect(forecast[:data][:attributes]).to have_key(:current_weather)
         expect(forecast[:data][:attributes]).to have_key(:daily_weather)
         expect(forecast[:data][:attributes]).to have_key(:hourly_weather)
+
+        expect(forecast[:data][:attributes][:current_weather]).to be_a(Hash)
         expect(forecast[:data][:attributes][:current_weather].length).to eq(10)
         expect(forecast[:data][:attributes][:current_weather]).to have_key(:datetime)
         expect(forecast[:data][:attributes][:current_weather][:datetime]).to be_a(String)
@@ -51,8 +54,29 @@ describe 'Geocoding Requests' do
         expect(forecast[:data][:attributes][:current_weather]).to have_key(:icon)
         expect(forecast[:data][:attributes][:current_weather][:icon]).to be_a(String)
 
-        
+        expect(forecast[:data][:attributes][:daily_weather]).to be_an(Array)
+        expect(forecast[:data][:attributes][:daily_weather].length).to eq(5)
 
+        forecast[:data][:attributes][:daily_weather].each do |day|
+          # require "pry"; binding.pry
+          expect(day).to have_key(:date)
+          expect(day[:date]).to be_a(String)
+          expect(Date.strptime(day[:date], '%m-%d-%Y')).to be_a(Date)
+          expect(day).to have_key(:sunrise)
+          expect(day[:sunrise]).to be_a(String)
+          expect(Time.parse(day[:sunrise]).class).to be(Time)
+          expect(day).to have_key(:sunset)
+          expect(day[:sunset]).to be_a(String)
+          expect(Time.parse(day[:sunset]).class).to be(Time)
+          expect(day).to have_key(:max_temp)
+          expect(day[:max_temp]).to be_a(Float)
+          expect(day).to have_key(:min_temp)
+          expect(day[:min_temp]).to be_a(Float)
+          expect(day).to have_key(:conditions)
+          expect(day[:conditions]).to be_a(String)
+          expect(day).to have_key(:icon)
+          expect(day[:icon]).to be_a(String)
+        end
       end
     end
   end
