@@ -2,11 +2,6 @@ require 'ostruct'
 
 class Api::V1::ForecastsController < ActionController::API
   def forecast
-    # conn_1 = Faraday.new(
-    #   url: 'http://www.mapquestapi.com',
-    #   params: {key: 'TTmP4GJnMSEgIJ5sd9JKFdSAqA0ZiviA'}
-    # )
-
     location = params[:location]
 
     conn_1 = Faraday.new(
@@ -39,7 +34,7 @@ class Api::V1::ForecastsController < ActionController::API
 
 
 
-    current_weather = OpenStruct.new({
+    current_weather_data = {
                         datetime: Time.at(weather[:current][:dt]),
                         sunrise: Time.at(weather[:current][:sunrise]),
                         sunset: Time.at(weather[:current][:sunset]),
@@ -50,12 +45,12 @@ class Api::V1::ForecastsController < ActionController::API
                         visibility: weather[:current][:visibility],
                         conditions: weather[:current][:weather][0][:description],
                         icon: weather[:current][:weather][0][:icon]
-                      })
+                      }
 
 
 
-    daily_weather = weather[:daily][0..4].map do |day|
-                      OpenStruct.new({
+    daily_weather_data = weather[:daily][0..4].map do |day|
+                                    {
                                       date: Time.at(day[:dt]).strftime("%m-%e-%y"),
                                       sunrise: Time.at(day[:sunrise]),
                                       sunset: Time.at(day[:sunset]),
@@ -63,25 +58,30 @@ class Api::V1::ForecastsController < ActionController::API
                                       min_temp: day[:temp][:min],
                                       conditions: day[:weather][0][:description],
                                       icon: day[:weather][0][:icon]
-                        })
-                    end
+                                    }
+                        end
 
 
-    hourly_weather = weather[:hourly][0..7].map do |hour|
-                    OpenStruct.new({
+    hourly_weather_data = weather[:hourly][0..7].map do |hour|
+                    {
                                     time: Time.at(hour[:dt]).strftime("%H:%M:%S"),
                                     temp: hour[:temp],
                                     description: hour[:weather][0][:description],
                                     icon: hour[:weather][0][:icon]
-                      })
+                      }
                   end
 
-    require "pry"; binding.pry
+
+    forecast = OpenStruct.new({
+                                id: nil,
+                                current_weather: current_weather_data,
+                                daily_weather: daily_weather_data,
+                                hourly_weather: hourly_weather_data
+                              })
 
 
 
-
-
+    render json: ForecastSerializer.new(forecast)
   end
 end
 
