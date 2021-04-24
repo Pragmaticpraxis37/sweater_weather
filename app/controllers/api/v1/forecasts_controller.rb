@@ -1,3 +1,5 @@
+require 'ostruct'
+
 class Api::V1::ForecastsController < ActionController::API
   def forecast
     # conn_1 = Faraday.new(
@@ -34,45 +36,73 @@ class Api::V1::ForecastsController < ActionController::API
 
     weather = JSON.parse(response_2.body, symbolize_names: true)
 
-    current_weather = weather[:current]
-
-
-    datetime = Time.at(current_weather[:dt])
-    sunrise = Time.at(current_weather[:sunrise])
-    sunset = Time.at(current_weather[:sunset])
-    temperature = current_weather[:temp]
-    feels_like = current_weather[:feels_like]
-    pressure = current_weather[:pressure]
-    humidity = current_weather[:humidity]
-    uvi = current_weather[:uvi]
-    visibility = current_weather[:visibility]
-    description = current_weather[:weather][0][:description]
-    icon = current_weather[:weather][0][:icon]
-
-    # require "pry"; binding.pry
-    hourly_weather = weather[:hourly][0..7]
-
-    eight_hours = []
 
 
 
-    # require "pry"; binding.pry
+    current_weather = OpenStruct.new({
+                        datetime: Time.at(weather[:current][:dt]),
+                        sunrise: Time.at(weather[:current][:sunrise]),
+                        sunset: Time.at(weather[:current][:sunset]),
+                        temperature: weather[:current][:temp],
+                        feels_like: weather[:current][:feels_like],
+                        humidity: weather[:current][:humidity],
+                        uvi: weather[:current][:uvi],
+                        visibility: weather[:current][:visibility],
+                        conditions: weather[:current][:weather][0][:description],
+                        icon: weather[:current][:weather][0][:icon]
+                      })
 
 
-    hourly_weather.each do |hour|
-      require "pry"; binding.pry
-      eight_hours << [:datetime] = Time.at(hour[:dt])
-      # eight_hours[:temp] = hour[:temp]
-      # eight_hours[:conditions] = hour[:weather][0][:description]
-      # eight_hours[:conditions] = hour[:weather][0][:icon]
-    end
+
+    daily_weather = weather[:daily][0..4].map do |day|
+                      OpenStruct.new({
+                                      date: Time.at(day[:dt]).strftime("%m-%e-%y"),
+                                      sunrise: Time.at(day[:sunrise]),
+                                      sunset: Time.at(day[:sunset]),
+                                      max_temp: day[:temp][:max],
+                                      min_temp: day[:temp][:min],
+                                      conditions: day[:weather][0][:description],
+                                      icon: day[:weather][0][:icon]
+                        })
+                    end
+
+
+    hourly_weather = weather[:hourly][0..7].map do |hour|
+                    OpenStruct.new({
+                                    time: Time.at(hour[:dt]).strftime("%H:%M:%S"),
+                                    temp: hour[:temp],
+                                    description: hour[:weather][0][:description],
+                                    icon: hour[:weather][0][:icon]
+                      })
+                  end
 
     require "pry"; binding.pry
 
+
+
+
+
+  end
 end
 
 
-# conn_2 = Faraday.new(
-#   url: 'https://api.openweathermap.org',
-#   params: {appid: 'b3c5b8f6cfb0dccbc94d46c466cab9ab'}
-# )
+
+
+
+
+
+
+# current_weather = weather[:current]
+
+
+# datetime = Time.at(current_weather[:dt])
+# sunrise = Time.at(current_weather[:sunrise])
+# sunset = Time.at(current_weather[:sunset])
+# temperature = current_weather[:temp]
+# feels_like = current_weather[:feels_like]
+# pressure = current_weather[:pressure]
+# humidity = current_weather[:humidity]
+# uvi = current_weather[:uvi]
+# visibility = current_weather[:visibility]
+# description = current_weather[:weather][0][:description]
+# icon = current_weather[:weather][0][:icon]
