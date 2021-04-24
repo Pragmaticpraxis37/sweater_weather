@@ -8,6 +8,9 @@ describe 'Geocoding Requests' do
 
       require "pry"; binding.pry
 
+      forecast = JSON.parse(response.body, symbolize_names: true)
+
+
       expect(data).to be_a(OpenStruct)
       end
     end
