@@ -104,7 +104,9 @@ describe 'Forecast Requests' do
     it 'returns an error message if only a string is passed to the query param' do
       VCR.turn_off!
       WebMock.allow_net_connect!
-        get api_v1_forecast_path, params: {location: "" }
+        get api_v1_forecast_path, params: {location: ""}
+
+
 
         error = JSON.parse(response.body, symbolize_names: true)
 
