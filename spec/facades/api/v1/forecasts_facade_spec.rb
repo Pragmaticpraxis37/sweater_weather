@@ -3,7 +3,7 @@ require 'rails_helper'
 describe 'Forecasts Facade' do
   describe 'class methods' do
     it '::current_weather_data' do
-      VCR.use_cassette('Denver_CO') do
+      VCR.use_cassette('Denver,CO_Forecast') do
         weather = ForecastsService.forecast([39.738453, -104.984853])
         result = ForecastsFacade.current_weather_data(weather)
 
@@ -23,7 +23,7 @@ describe 'Forecasts Facade' do
     end
 
     it '::daily_weather_data' do
-      VCR.use_cassette('Denver_CO') do
+      VCR.use_cassette('Denver,CO_Forecast') do
         weather = ForecastsService.forecast([39.738453, -104.984853])
         result = ForecastsFacade.daily_weather_data(weather)
 
@@ -53,7 +53,7 @@ describe 'Forecasts Facade' do
     end
 
     it '::hourly_weather_data' do
-      VCR.use_cassette('Denver_CO') do
+      VCR.use_cassette('Denver,CO_Forecast') do
         weather = ForecastsService.forecast([39.738453, -104.984853])
         result = ForecastsFacade.hourly_weather_data(weather)
 
@@ -76,7 +76,7 @@ describe 'Forecasts Facade' do
     end
 
     it '::forecast_data' do
-      VCR.use_cassette('Denver_CO') do
+      VCR.use_cassette('Denver,CO_Forecast') do
         weather = ForecastsService.forecast([39.738453, -104.984853])
         result = ForecastsFacade.forecast_data(weather)
 

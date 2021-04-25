@@ -9,7 +9,7 @@ describe 'Coordinates Service' do
     end
 
     it '::coordinates' do
-      VCR.use_cassette('Denver_CO') do
+      VCR.use_cassette('Denver,CO_Forecast') do
         result = CoordinatesService.coordinates("Denver,CO")
 
         expect(result).to be_an(Array)

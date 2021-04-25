@@ -9,13 +9,12 @@ describe 'Images Service' do
     end
 
     it '::image_data' do
-      VCR.turn_off!
-      WebMock.allow_net_connect!
+      VCR.use_cassette('Denver,CO_Image') do
         result = ImagesService.image_data("Denver,CO")
 
         expect(result).to be_a(Hash)
         expect(result.keys).to match_array [:total, :total_pages, :results]
-      VCR.turn_on!
+      end
     end
   end
 end

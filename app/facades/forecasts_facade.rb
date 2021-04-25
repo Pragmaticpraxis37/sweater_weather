@@ -8,7 +8,7 @@ class ForecastsFacade
     else
       weather_data = ForecastsService.forecast(coordinates)
       forecast_data(weather_data)
-    end 
+    end
   end
 
   def self.current_weather_data(weather)
