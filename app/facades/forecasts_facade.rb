@@ -1,8 +1,14 @@
 class ForecastsFacade
 
   def self.forecast(location)
-    weather_data = ForecastsService.forecast(CoordinatesService.coordinates(location))
-    forecast_data(weather_data)
+    coordinates = CoordinatesService.coordinates(location)
+
+    if coordinates == "Error search terms"
+      return "Error search terms"
+    else
+      weather_data = ForecastsService.forecast(coordinates)
+      forecast_data(weather_data)
+    end 
   end
 
   def self.current_weather_data(weather)
