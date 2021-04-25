@@ -30,6 +30,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'fast_jsonapi'
 gem 'figaro'
 gem 'faraday'
+gem 'bcrypt', '~> 3.1.7'
 
 
 group :development, :test do
