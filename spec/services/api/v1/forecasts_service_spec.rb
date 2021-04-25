@@ -9,7 +9,7 @@ describe 'Forecasts Service' do
     end
 
     it '::forecast' do
-      VCR.use_cassette('Denver_CO') do
+      VCR.use_cassette('Denver,CO_Forecast') do
         result = ForecastsService.forecast([39.738453, -104.984853])
 
         expect(result).to be_a(Hash)

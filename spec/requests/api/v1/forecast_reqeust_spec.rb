@@ -4,7 +4,7 @@ require 'date'
 describe 'Forecast Requests' do
   describe 'obtains forecast - happy path' do
     it 'can obtain forecast information' do
-      VCR.use_cassette('Denver_CO') do
+      VCR.use_cassette('Denver,CO_Forecast') do
         get api_v1_forecast_path, params: {location: "Denver,CO"}
 
         forecast = JSON.parse(response.body, symbolize_names: true)
@@ -102,8 +102,7 @@ describe 'Forecast Requests' do
 
   describe 'obtains forecast - sad path' do
     it 'returns an error message if only a string is passed to the query param' do
-      VCR.turn_off!
-      WebMock.allow_net_connect!
+      VCR.use_cassette('Empty_Forecast') do
         get api_v1_forecast_path, params: {location: ""}
 
         error = JSON.parse(response.body, symbolize_names: true)
@@ -111,20 +110,17 @@ describe 'Forecast Requests' do
         expect(response.status).to eq(400)
         expect(error).to be_a(Hash)
         expect(error[:error]).to eq("Please provide search terms.")
-      VCR.turn_on!
+      end
     end
 
     it 'returns an error message if no query param is passed' do
-      VCR.turn_off!
-      WebMock.allow_net_connect!
-        get api_v1_forecast_path
+      get api_v1_forecast_path
 
-        error = JSON.parse(response.body, symbolize_names: true)
+      error = JSON.parse(response.body, symbolize_names: true)
 
-        expect(response.status).to eq(400)
-        expect(error).to be_a(Hash)
-        expect(error[:error]).to eq("Please provide a query parameter and search terms.")
-      VCR.turn_on!
+      expect(response.status).to eq(400)
+      expect(error).to be_a(Hash)
+      expect(error[:error]).to eq("Please provide a query parameter and search terms.")
     end
   end
 end

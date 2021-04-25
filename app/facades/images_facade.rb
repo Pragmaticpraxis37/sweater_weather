@@ -9,7 +9,7 @@ class ImagesFacade
       credit = credit_data(image_data)
       image_and_credit = image_data(image_data, credit)
       background(image_and_credit)
-    end 
+    end
   end
 
   def self.credit_data(image_data)

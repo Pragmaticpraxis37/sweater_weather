@@ -3,8 +3,7 @@ require 'rails_helper'
 describe 'Forecasts Facade' do
   describe 'class methods' do
     it '::current_weather_data' do
-      VCR.turn_off!
-      WebMock.allow_net_connect!
+      VCR.use_cassette('Denver,CO_Image') do
         image =  ImagesService.image_data("Denver,CO")
         result = ImagesFacade.credit_data(image)
 
@@ -15,12 +14,11 @@ describe 'Forecasts Facade' do
         expect(result[:source]).to eq('unsplash.com')
         expect(result[:author]).to be_a(String)
         expect(result[:attribution_link]).to be_a(String)
-      VCR.turn_on!
+      end
     end
 
     it '::image_data' do
-      VCR.turn_off!
-      WebMock.allow_net_connect!
+      VCR.use_cassette('Denver,CO_Image') do
         image =  ImagesService.image_data("Denver,CO")
         credit = ImagesFacade.credit_data(image)
         result = ImagesFacade.image_data(image, credit)
@@ -37,12 +35,11 @@ describe 'Forecasts Facade' do
         expect(result[:credit][:source]).to eq('unsplash.com')
         expect(result[:credit][:author]).to be_a(String)
         expect(result[:credit][:attribution_link]).to be_a(String)
-      VCR.turn_on!
+      end
     end
 
     it '::background' do
-      VCR.turn_off!
-      WebMock.allow_net_connect!
+      VCR.use_cassette('Denver,CO_Image') do
         image =  ImagesService.image_data("Denver,CO")
         credit = ImagesFacade.credit_data(image)
         image_and_credit = ImagesFacade.image_data(image, credit)
@@ -51,7 +48,7 @@ describe 'Forecasts Facade' do
         expect(result).to be_an(OpenStruct)
         expect(result.respond_to?('id')).to eq(true)
         expect(result.respond_to?('image')).to eq(true)
-      VCR.turn_on!
+      end 
     end
   end
 end

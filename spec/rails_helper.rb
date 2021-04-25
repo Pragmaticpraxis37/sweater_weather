@@ -79,6 +79,7 @@ VCR.configure do |config|
   # config.allow_http_connections_when_no_cassette = true
   config.filter_sensitive_data( ENV['key'] ) { ENV['key'] }
   config.filter_sensitive_data( ENV['appid'] ) { ENV['appid'] }
+  config.filter_sensitive_data( ENV['client_id'] ) { ENV['client_id'] }
   config.default_cassette_options = { re_record_interval: 7.days }
   config.configure_rspec_metadata!
 end

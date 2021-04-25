@@ -3,8 +3,7 @@ require 'rails_helper'
 describe 'Background Request' do
   describe 'obtains background - happy path' do
     it 'can obtain background information' do
-      VCR.turn_off!
-      WebMock.allow_net_connect!
+      VCR.use_cassette('Denver,CO_Image') do
         get api_v1_backgrounds_path, params: {location: "Denver,CO"}
 
         background = JSON.parse(response.body, symbolize_names: true)
@@ -40,15 +39,13 @@ describe 'Background Request' do
         expect(background[:data][:attributes][:image][:credit][:source]).to be_a(String)
         expect(background[:data][:attributes][:image][:credit][:author]).to be_a(String)
         expect(background[:data][:attributes][:image][:credit][:attribution_link]).to be_a(String)
-
-      VCR.turn_on!
+      end
     end
   end
 
   describe 'obtains background - sad path' do
     it 'returns an error message if only a string is passed to the query param' do
-      VCR.turn_off!
-      WebMock.allow_net_connect!
+      VCR.use_cassette('Empty_Image') do
         get api_v1_backgrounds_path, params: {location: ""}
 
         error = JSON.parse(response.body, symbolize_names: true)
@@ -56,21 +53,17 @@ describe 'Background Request' do
         expect(response.status).to eq(400)
         expect(error).to be_a(Hash)
         expect(error[:error]).to eq("Please provide search terms.")
-      VCR.turn_on!
+      end
     end
 
     it 'returns an error message if no query param is passed' do
-      VCR.turn_off!
-      WebMock.allow_net_connect!
-        get api_v1_backgrounds_path
+      get api_v1_backgrounds_path
 
-        error = JSON.parse(response.body, symbolize_names: true)
-        # require "pry"; binding.pry
+      error = JSON.parse(response.body, symbolize_names: true)
 
-        expect(response.status).to eq(400)
-        expect(error).to be_a(Hash)
-        expect(error[:error]).to eq("Please provide a query parameter and search terms.")
-      VCR.turn_on!
+      expect(response.status).to eq(400)
+      expect(error).to be_a(Hash)
+      expect(error[:error]).to eq("Please provide a query parameter and search terms.")
     end
   end
 end
