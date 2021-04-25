@@ -3,25 +3,7 @@ class ForecastsFacade
   def self.forecast(location)
     weather_data = ForecastsService.forecast(CoordinatesService.coordinates(location))
     forecast_data(weather_data)
-    # require "pry"; binding.pry
   end
-
-  # def self.lat_and_lon(location)
-  #   require "pry"; binding.pry
-  #
-  #   self.weather_data(lat, lon)
-  # end
-
-  # def self.weather_data(lat, lon)
-  #
-  #
-  #
-  #
-  #   current_weather_data = self.current_weather_data(weather)
-  #   daily_weather_data = self.daily_weather_data(weather)
-  #   hourly_weather_data = self.hourly_weather_data(weather)
-  #   forecast = forecast_data(current_weather_data, daily_weather_data, hourly_weather_data)
-  # end
 
   def self.current_weather_data(weather)
     {

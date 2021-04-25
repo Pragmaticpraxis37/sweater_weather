@@ -76,5 +76,9 @@ end
 VCR.configure do |config|
   config.cassette_library_dir = 'spec/fixtures/vcr_cassettes'
   config.hook_into :webmock
-  config.filter_sensitive_data('SECURED') { ENV['MAP_QUEST_KEY'] }
+  # config.allow_http_connections_when_no_cassette = true
+  config.filter_sensitive_data( ENV['key'] ) { ENV['key'] }
+  config.filter_sensitive_data( ENV['appid'] ) { ENV['appid'] }
+  config.default_cassette_options = { re_record_interval: 7.days }
+  config.configure_rspec_metadata!
 end

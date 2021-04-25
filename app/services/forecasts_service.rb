@@ -3,7 +3,7 @@ class ForecastsService
   def self.conn
     Faraday.new(
       url: "#{ENV['OPEN_WEATHER_BASE_URL']}",
-      params: {appid: "#{ENV['OPEN_WEATHER_KEY']}"}
+      params: {appid: "#{ENV['appid']}"}
     )
   end
 
