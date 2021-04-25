@@ -106,8 +106,6 @@ describe 'Forecast Requests' do
       WebMock.allow_net_connect!
         get api_v1_forecast_path, params: {location: ""}
 
-
-
         error = JSON.parse(response.body, symbolize_names: true)
 
         expect(response.status).to eq(400)

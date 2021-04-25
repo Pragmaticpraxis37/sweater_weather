@@ -1,39 +1,23 @@
 require 'ostruct'
 
 class Api::V1::ImagesController < ActionController::API
+  before_action :check_params
+
   def image
-    conn = Faraday.new(
-        url: "#{ENV['UNSPLASH_BASE_URL']}",
-        params: {client_id: "#{ENV['client_id']}"}
-      )
+    image_data = ImagesFacade.image(params[:location])
 
-    response = conn.get('search/photos') do |req|
-          req.params['page'] = 1
-          req.params['per_page'] = 1
-          req.params['query'] = 'Denver,CO'
-        end
+    if image_data == "Error search terms"
+      render json: {error: "Please provide search terms."}, status: 400
+    else
+      render json: ImageSerializer.new(image_data)
+    end 
+  end
 
-    background_data = JSON.parse(response.body, symbolize_names: true)
+  private
 
-    credit =  {
-                source: "unsplash.com",
-                author: background_data[:results][0][:user][:name],
-                attribution_link: background_data[:results][0][:user][:links][:self]
-              }
-
-
-    photo = {
-              location: background_data[:results][0][:user][:location],
-              image_url: background_data[:results][0][:urls][:regular],
-              credit: credit
-            }
-
-    background = OpenStruct.new({
-            id: nil,
-            image: photo
-      })
-
-    render json: ImageSerializer.new(background)
-
+  def check_params
+    if params[:location].nil?
+      render json: {error: "Please provide a query parameter and search terms."}, status: 400
+    end
   end
 end
