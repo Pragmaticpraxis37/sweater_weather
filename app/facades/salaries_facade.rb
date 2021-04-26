@@ -27,9 +27,10 @@ class SalariesFacade
   end
 
   def self.urban_areas_collection(destination)
-    response = Faraday.get('https://api.teleport.org/api/urban_areas/')
-
-    urban_areas_data = JSON.parse(response.body, symbolize_names: true)
+    # response = Faraday.get('https://api.teleport.org/api/urban_areas/')
+    #
+    # urban_areas_data = JSON.parse(response.body, symbolize_names: true)
+    urban_areas_data = SalariesService.urban_area(destination)
 
     urban_areas = urban_areas_data[:_links][:"ua:item"]
 
@@ -45,19 +46,18 @@ class SalariesFacade
   end
 
   def self.slug_collection(slug)
-    response_slug = Faraday.get(slug)
-
-    slug_data = JSON.parse(response_slug.body, symbolize_names: true)
-
+    # response_slug = Faraday.get(slug)
+    # slug_data = JSON.parse(response_slug.body, symbolize_names: true)
+    slug_data = SalariesService.slug(slug)
     slug_data[:ua_id]
   end
 
   def self.salaries(id)
     # require "pry"; binding.pry
-    response_salaries = Faraday.get("https://api.teleport.org/api/urban_areas/teleport:#{id}/salaries/")
-
-    salaries_data = JSON.parse(response_salaries.body, symbolize_names: true)
-
+    # response_salaries = Faraday.get("https://api.teleport.org/api/urban_areas/teleport:#{id}/salaries/")
+    #
+    # salaries_data = JSON.parse(response_salaries.body, symbolize_names: true)
+    salaries_data = SalariesService.salaries(id)
 
     jobs = ["Data Analyst", "Data Scientist", "Mobile Developer", "QA Engineer", "Software Engineer", "Systems Administrator", "Web Developer"]
 
