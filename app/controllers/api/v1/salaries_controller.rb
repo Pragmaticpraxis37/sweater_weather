@@ -17,7 +17,16 @@ class Api::V1::SalariesController < ActionController::API
 
     urban_areas_data = JSON.parse(response.body, symbolize_names: true)
 
-    urban_areas = body[:_links][:"ua:item"]
+    urban_areas = urban_areas_data[:_links][:"ua:item"]
+
+    collector = []
+
+    urban_areas.each do |urban_area|
+      if urban_area[:name].downcase == params[:destination].downcase
+        collector << urban_area
+      end
+    end
+
 
     require "pry"; binding.pry
   end
