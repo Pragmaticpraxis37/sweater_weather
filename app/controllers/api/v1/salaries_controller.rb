@@ -5,11 +5,11 @@ class Api::V1::SalariesController < ActionController::API
     coordinates = CoordinatesService.coordinates(params[:destination])
     weather = ForecastsService.forecast(coordinates)
 
-    destination = { destination: params[:destination]}
+    destination = params[:destination]
 
     forecast =  {
-                  forecast: { summary: weather[:current][:weather][0][:description],
-                            temperature: "#{weather[:current][:temp]} F" }
+                  summary: weather[:current][:weather][0][:description],
+                  temperature: "#{weather[:current][:temp]} F"
                 }
 
 
@@ -42,13 +42,24 @@ class Api::V1::SalariesController < ActionController::API
 
     jobs = ["Data Analyst", "Data Scientist", "Mobile Developer", "QA Engineer", "Software Engineer", "Systems Administrator", "Web Developer"]
 
-    salaries_collection = {}
+    salaries_collection = []
 
     salaries_data[:salaries].each do |salary|
       if jobs.include?(salary[:job][:title])
-        require "pry"; binding.pry
+        # require "pry"; binding.pry
+        salaries_collection << {title: salary[:job][:title], min: salary[:salary_percentiles][:percentile_25].truncate(2).to_s, max: salary[:salary_percentiles][:percentile_75].truncate(2).to_s}
       end
     end
+
+    serializer_collection = OpenStruct.new({
+      id: nil,
+      destination: destination,
+      forecast: forecast,
+      salaries: salaries_collection
+      })
+
+    render json: SalariesSerializer.new(serializer_collection)
+    # require "pry"; binding.pry
   end
 
 end

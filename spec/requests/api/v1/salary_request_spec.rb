@@ -10,6 +10,7 @@ describe 'Salaries Requests' do
 
       salaries = JSON.parse(response.body, symbolize_names: true)
 
+
       expect(salaries).to be_a(Hash)
       expect(salaries.length).to eq(1)
       expect(salaries).to have_key(:data)
@@ -20,8 +21,8 @@ describe 'Salaries Requests' do
       expect(salaries[:data][:type]).to eq("salaries")
       expect(salaries[:data][:attributes]).to be_a(Hash)
       expect(salaries[:data][:attributes].length).to eq(3)
-      expect(salaries[:data].keys).to match_array [:destination, :forecast, :salaries]
-      expect(salaries[:data][:attributes][:destination].length).to eq(1)
+      # require "pry"; binding.pry
+      expect(salaries[:data][:attributes].keys).to match_array [:destination, :forecast, :salaries]
       expect(salaries[:data][:attributes][:destination]).to be_a(String)
       expect(salaries[:data][:attributes][:forecast].length).to eq(2)
       expect(salaries[:data][:attributes][:forecast].keys).to match_array [:summary, :temperature]
