@@ -19,16 +19,36 @@ class Api::V1::SalariesController < ActionController::API
 
     urban_areas = urban_areas_data[:_links][:"ua:item"]
 
-    collector = []
+    slug = nil
 
     urban_areas.each do |urban_area|
       if urban_area[:name].downcase == params[:destination].downcase
-        collector << urban_area
+        slug = urban_area[:href]
       end
     end
 
+    response_slug = Faraday.get(slug)
 
-    require "pry"; binding.pry
+    slug_data = JSON.parse(response_slug.body, symbolize_names: true)
+
+    slug_id = slug_data[:ua_id]
+
+    response_salaries = Faraday.get("https://api.teleport.org/api/urban_areas/teleport:#{slug_id}/salaries/")
+
+
+
+    salaries_data = JSON.parse(response_salaries.body, symbolize_names: true)
+
+
+    jobs = ["Data Analyst", "Data Scientist", "Mobile Developer", "QA Engineer", "Software Engineer", "Systems Administrator", "Web Developer"]
+
+    salaries_collection = {}
+
+    salaries_data[:salaries].each do |salary|
+      if jobs.include?(salary[:job][:title])
+        require "pry"; binding.pry
+      end
+    end
   end
 
 end
