@@ -4,31 +4,47 @@ describe 'Salaries Requests' do
   describe 'obtains salaries - happy path' do
     it 'can obtain weather and salaries information' do
 
-      get api_v1_salary_path, params: {location: "denver"}
+      get api_v1_salaries_path, params: {destination: "denver"}
 
       expect(response).to be_successful
 
-      salary = JSON.parse(response.body, symbolize_names: true)
+      salaries = JSON.parse(response.body, symbolize_names: true)
 
-      expect(salary).to be_a(Hash)
-      expect(salary.length).to eq(1)
-      expect(salary).to have_key(:data)
-      expect(salary[:data]).to be_a(Hash)
-      expect(salary[:data].length).to eq(3)
-      expect(salary[:data].keys).to match_array [:id, :type, :attributes]
-      expect(salary[:data][:id]).to eq(nil)
-      expect(salary[:data][:type]).to eq("salaries")
-      expect(salary[:data][:attributes]).to be_a(Hash)
-      expect(salary[:data][:attributes].length).to eq(3)
-      expect(salary[:data].keys).to match_array [:destination, :forecast, :salaries]
-      expect(salary[:data][:attributes][:destination].length).to eq(1)
-      expect(salary[:data][:attributes][:destination]).to be_a(String)
-      expect(salary[:data][:attributes][:forecast].length).to eq(2)
-      expect(salary[:data][:attributes][:forecast].keys).to match_array [:summary, :temperature]
-      expect(salary[:data][:attributes][:forecast][:summary]).to be_a(String)
-      expect(salary[:data][:attributes][:forecast][:temperature]).to be_a(String)
-      expect(salary[:data][:attributes][:salaries]).to be_an(Array)
-      expect(salary[:data][:attributes][:salaries][0]).to be_a(Hash)
+      expect(salaries).to be_a(Hash)
+      expect(salaries.length).to eq(1)
+      expect(salaries).to have_key(:data)
+      expect(salaries[:data]).to be_a(Hash)
+      expect(salaries[:data].length).to eq(3)
+      expect(salaries[:data].keys).to match_array [:id, :type, :attributes]
+      expect(salaries[:data][:id]).to eq(nil)
+      expect(salaries[:data][:type]).to eq("salaries")
+      expect(salaries[:data][:attributes]).to be_a(Hash)
+      expect(salaries[:data][:attributes].length).to eq(3)
+      expect(salaries[:data].keys).to match_array [:destination, :forecast, :salaries]
+      expect(salaries[:data][:attributes][:destination].length).to eq(1)
+      expect(salaries[:data][:attributes][:destination]).to be_a(String)
+      expect(salaries[:data][:attributes][:forecast].length).to eq(2)
+      expect(salaries[:data][:attributes][:forecast].keys).to match_array [:summary, :temperature]
+      expect(salaries[:data][:attributes][:forecast][:summary]).to be_a(String)
+      expect(salaries[:data][:attributes][:forecast][:temperature]).to be_a(String)
+      expect(salaries[:data][:attributes][:salaries]).to be_an(Array)
+
+      salaries[:data][:attributes][:salaries].each do |job|
+        expect(job).to be_a(Hash)
+        expect(job.length).to eq(3)
+        expect(job.keys).to match_array [:title, :min, :max]
+        expect(job[:title]).to be_a(String)
+        expect(job[:min]).to be_a(String)
+        expect(job[:max]).to be_a(String)
+      end
+
     end
   end
 end
+
+# expect(salary[:data][:attributes][:salaries][0]).to be_a(Hash)
+# expect(salary[:data][:attributes][:salaries][0].length).to eq(3)
+# expect(salary[:data][:attributes][:salaries][0].keys).to match_array [:title, :min, :max]
+# expect(salary[:data][:attributes][:salaries][0][:title]).to be_a(String)
+# expect(salary[:data][:attributes][:salaries][0][:min]).to be_a(String)
+# expect(salary[:data][:attributes][:salaries][0][:max]).to be_a(String)
