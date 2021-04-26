@@ -21,7 +21,6 @@ describe 'Salaries Requests' do
       expect(salaries[:data][:type]).to eq("salaries")
       expect(salaries[:data][:attributes]).to be_a(Hash)
       expect(salaries[:data][:attributes].length).to eq(3)
-      # require "pry"; binding.pry
       expect(salaries[:data][:attributes].keys).to match_array [:destination, :forecast, :salaries]
       expect(salaries[:data][:attributes][:destination]).to be_a(String)
       expect(salaries[:data][:attributes][:forecast].length).to eq(2)
@@ -42,10 +41,3 @@ describe 'Salaries Requests' do
     end
   end
 end
-
-# expect(salary[:data][:attributes][:salaries][0]).to be_a(Hash)
-# expect(salary[:data][:attributes][:salaries][0].length).to eq(3)
-# expect(salary[:data][:attributes][:salaries][0].keys).to match_array [:title, :min, :max]
-# expect(salary[:data][:attributes][:salaries][0][:title]).to be_a(String)
-# expect(salary[:data][:attributes][:salaries][0][:min]).to be_a(String)
-# expect(salary[:data][:attributes][:salaries][0][:max]).to be_a(String)

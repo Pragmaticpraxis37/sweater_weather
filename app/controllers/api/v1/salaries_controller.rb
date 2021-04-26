@@ -2,15 +2,8 @@ class Api::V1::SalariesController < ActionController::API
 
   def salary
 
-    coordinates = CoordinatesService.coordinates(params[:destination])
-    weather = ForecastsService.forecast(coordinates)
-
-    destination = params[:destination]
-
-    forecast =  {
-                  summary: weather[:current][:weather][0][:description],
-                  temperature: "#{weather[:current][:temp]} F"
-                }
+    SalariesFacade.salaries_collection(params[:destination])
+    require "pry"; binding.pry
 
 
     response = Faraday.get('https://api.teleport.org/api/urban_areas/')
@@ -46,7 +39,6 @@ class Api::V1::SalariesController < ActionController::API
 
     salaries_data[:salaries].each do |salary|
       if jobs.include?(salary[:job][:title])
-        # require "pry"; binding.pry
         salaries_collection << {title: salary[:job][:title], min: salary[:salary_percentiles][:percentile_25].truncate(2).to_s, max: salary[:salary_percentiles][:percentile_75].truncate(2).to_s}
       end
     end
