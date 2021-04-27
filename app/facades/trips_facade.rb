@@ -17,7 +17,6 @@ class TripsFacade
     @@hourly_data = weather_data[:hourly]
     @@daily_data = weather_data[:daily]
 
-
     trip_time = time(trip_time_data)
     start_city = start_city(trip_data[:route][:locations][0])
     end_city = end_city(trip_data[:route][:locations][1])

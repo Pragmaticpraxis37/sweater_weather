@@ -18,8 +18,6 @@ describe 'Users Requests - Create' do
 
       user = JSON.parse(response.body, symbolize_names: true)
 
-      # require "pry"; binding.pry
-
       expect(user).to be_a(Hash)
       expect(user.length).to eq(1)
       expect(user.keys).to match_array [:data]

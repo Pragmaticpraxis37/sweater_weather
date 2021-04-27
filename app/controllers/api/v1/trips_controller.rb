@@ -6,7 +6,7 @@ class Api::V1::TripsController < ActionController::API
 
   def trip
     serialized_collection = TripsFacade.collection(trip_params[:origin], trip_params[:destination])
-    
+
     # trip_data = CoordinatesService.directions(trip_params[:origin], trip_params[:destination])
 
     # route_impossible?(trip_data)
@@ -120,11 +120,11 @@ class Api::V1::TripsController < ActionController::API
 
   def check_params
     if trip_params[:origin].empty?
-      render json: {error: "Please provide an origin"}, status: 400
+      render json: {error: "Please provide an origin."}, status: 400
     elsif trip_params[:destination].empty?
-      render json: {error: "Please provide a destination"}, status: 400
+      render json: {error: "Please provide a destination."}, status: 400
     elsif trip_params[:api_key].empty?
-      render json: {error: "Please provide an API key"}, status: 401
+      render json: {error: "Please provide an API key."}, status: 401
     end
   end
 
