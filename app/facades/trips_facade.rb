@@ -23,7 +23,6 @@ class TripsFacade
     weather_at_eta = weather_at_destination(trip_time_data)
 
     collection = road_trip_collection(start_city, end_city, trip_time, weather_at_eta)
-
   end
 
   def self.trip_impossible(origin, destination, trip_data)

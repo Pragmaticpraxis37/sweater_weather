@@ -70,6 +70,19 @@ describe 'Trips Facade' do
       expect(result[:conditions]).to be_a(String)
       expect(result[:conditions]).to eq("Your eta is outside of available conditions data.")
     end
+
+    it '::' do
+      trip_data = CoordinatesService.directions("Denver, CO", "Pueblo, CO ")
+      trip_time_data = trip_data[:route][:realTime]
+      dest_lat_and_lon = trip_data[:route][:locations][1][:latLng]
+
+      weather_data = ForecastsService.forecast([dest_lat_and_lon[:lat], dest_lat_and_lon[:lng]])
+      @@hourly_data = weather_data[:hourly]
+      @@daily_data = weather_data[:daily]
+
+
+      require "pry"; binding.pry
+    end
   end
 
   describe 'class methods - sad path', :VCR do

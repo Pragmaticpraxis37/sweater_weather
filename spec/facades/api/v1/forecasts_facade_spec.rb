@@ -14,7 +14,7 @@ describe 'Forecasts Facade' do
       expect(result[:temperature]).to be_a(Float)
       expect(result[:feels_like]).to be_a(Float)
       expect(result[:humidity]).to be_an(Integer)
-      expect(result[:uvi]).to be_a(Float)
+      expect(result[:uvi]).to be_a(Integer)
       expect(result[:visibility]).to be_an(Integer)
       expect(result[:conditions]).to be_a(String)
       expect(result[:icon]).to be_a(String)
