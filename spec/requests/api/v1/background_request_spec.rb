@@ -49,7 +49,7 @@ describe 'Background Request' do
 
       expect(response.status).to eq(400)
       expect(error).to be_a(Hash)
-      expect(error[:error]).to eq("Please provide search terms.")
+      expect(error[:error]).to eq("Your search terms did not produce a result.")
     end
 
     it 'returns an error message if no query param is passed' do
