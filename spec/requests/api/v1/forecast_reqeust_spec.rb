@@ -3,7 +3,7 @@ require 'date'
 
 describe 'Forecast Requests' do
   describe 'obtains forecast - happy path' do
-    it 'can obtain forecast information', :VCR do
+    it 'can obtain forecast information', :vcr do
       get api_v1_forecast_path, params: {location: "Denver,CO"}
 
       forecast = JSON.parse(response.body, symbolize_names: true)
@@ -99,7 +99,7 @@ describe 'Forecast Requests' do
   end
 
   describe 'obtains forecast - sad path' do
-    it 'returns an error message if only a string is passed to the query param', :VCR do
+    it 'returns an error message if only a string is passed to the query param', :vcr do
       get api_v1_forecast_path, params: {location: ""}
 
       error = JSON.parse(response.body, symbolize_names: true)
@@ -126,6 +126,6 @@ end
 
 
 
-# VCR.turn_off!
+# vcr.turn_off!
 # WebMock.allow_net_connect!
-# VCR.turn_on!
+# vcr.turn_on!

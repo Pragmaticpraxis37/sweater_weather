@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe 'Forecasts Facade' do
   describe 'class methods' do
-    it '::current_weather_data', :VCR do
+    it '::current_weather_data', :vcr do
       weather = ForecastsService.forecast([39.738453, -104.984853])
       result = ForecastsFacade.current_weather_data(weather)
 
@@ -20,7 +20,7 @@ describe 'Forecasts Facade' do
       expect(result[:icon]).to be_a(String)
     end
 
-    it '::daily_weather_data', :VCR do
+    it '::daily_weather_data', :vcr do
       weather = ForecastsService.forecast([39.738453, -104.984853])
       result = ForecastsFacade.daily_weather_data(weather)
 
@@ -48,7 +48,7 @@ describe 'Forecasts Facade' do
       end
     end
 
-    it '::hourly_weather_data', :VCR do
+    it '::hourly_weather_data', :vcr do
       weather = ForecastsService.forecast([39.738453, -104.984853])
       result = ForecastsFacade.hourly_weather_data(weather)
 
@@ -69,7 +69,7 @@ describe 'Forecasts Facade' do
       end
     end
 
-    it '::forecast_data', :VCR do
+    it '::forecast_data', :vcr do
       weather = ForecastsService.forecast([39.738453, -104.984853])
       result = ForecastsFacade.forecast_data(weather)
 

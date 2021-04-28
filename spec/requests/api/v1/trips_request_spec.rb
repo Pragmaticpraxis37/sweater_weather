@@ -3,7 +3,7 @@ require 'date'
 
 describe 'Trips Requests' do
   describe 'obtains road trips - happy path' do
-    it 'can obtain road trip information for medium trips', :VCR do
+    it 'can obtain road trip information for medium trips', :vcr do
       user = User.create(email: 'jango@fett.com', password: 'hatesolo', api_key: SecureRandom.hex)
       user_api_key = user.api_key
 
@@ -45,7 +45,7 @@ describe 'Trips Requests' do
       expect(trip[:data][:attributes][:weather_at_eta][:conditions]).to be_a(String)
     end
 
-    it 'can obtain road trip information for long trips', :VCR do
+    it 'can obtain road trip information for long trips', :vcr do
       user = User.create(email: 'jango@fett.com', password: 'hatesolo', api_key: SecureRandom.hex)
       user_api_key = user.api_key
 
@@ -89,7 +89,7 @@ describe 'Trips Requests' do
   end
 
   describe 'obtains road trips - sad path' do
-    it 'will not display travel time if the route is impossible', :VCR do
+    it 'will not display travel time if the route is impossible', :vcr do
       user = User.create(email: 'obi@kenobi.com', password: 'loveluke', api_key: SecureRandom.hex)
       user_api_key = user.api_key
 

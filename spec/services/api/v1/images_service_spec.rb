@@ -8,7 +8,7 @@ describe 'Images Service' do
       expect(connection).to be_a(Faraday::Connection)
     end
 
-    it '::image_data', :VCR do
+    it '::image_data', :vcr do
       result = ImagesService.image_data("Denver,CO")
 
       expect(result).to be_a(Hash)
@@ -16,7 +16,7 @@ describe 'Images Service' do
     end
   end
 
-  describe 'class methods - sad path', :VCR do
+  describe 'class methods - sad path', :vcr do
     it '::image_data returns an error messge if no location is provided' do
       result = ImagesService.image_data("")
 

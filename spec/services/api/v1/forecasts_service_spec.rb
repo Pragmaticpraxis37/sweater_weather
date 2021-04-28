@@ -8,7 +8,7 @@ describe 'Forecasts Service' do
       expect(connection).to be_a(Faraday::Connection)
     end
 
-    it '::forecast', :VCR do
+    it '::forecast', :vcr do
       result = ForecastsService.forecast([39.738453, -104.984853])
 
       expect(result).to be_a(Hash)
@@ -16,7 +16,7 @@ describe 'Forecasts Service' do
     end
   end
 
-  describe 'class methods - sad path', :VCR do
+  describe 'class methods - sad path', :vcr do
     it '::forecast returns a 400 and error if no coordinates are provided' do
       result = ForecastsService.forecast("")
 

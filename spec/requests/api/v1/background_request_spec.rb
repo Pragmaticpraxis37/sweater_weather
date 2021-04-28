@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe 'Background Request' do
   describe 'obtains background - happy path' do
-    it 'can obtain background information', :VCR do
+    it 'can obtain background information', :vcr do
       get api_v1_backgrounds_path, params: {location: "Denver,CO"}
 
       background = JSON.parse(response.body, symbolize_names: true)
@@ -42,7 +42,7 @@ describe 'Background Request' do
   end
 
   describe 'obtains background - sad path' do
-    it 'returns an error message if only a string is passed to the query param', :VCR do
+    it 'returns an error message if only a string is passed to the query param', :vcr do
       get api_v1_backgrounds_path, params: {location: ""}
 
       error = JSON.parse(response.body, symbolize_names: true)

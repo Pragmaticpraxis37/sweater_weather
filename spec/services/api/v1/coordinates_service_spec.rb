@@ -8,7 +8,7 @@ describe 'Coordinates Service' do
       expect(connection).to be_a(Faraday::Connection)
     end
 
-    it '::coordinates', :VCR do
+    it '::coordinates', :vcr do
       result = CoordinatesService.coordinates("Denver,CO")
 
       expect(result).to be_an(Array)
@@ -17,7 +17,7 @@ describe 'Coordinates Service' do
       expect(result[1]).to be_a(Float)
     end
 
-    it '::directions', :VCR do
+    it '::directions', :vcr do
       result = CoordinatesService.directions("Denver,CO", "Pueblo,CO")
 
       expect(result).to be_an(Hash)

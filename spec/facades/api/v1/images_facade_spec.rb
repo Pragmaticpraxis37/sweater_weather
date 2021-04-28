@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe 'Forecasts Facade' do
   describe 'class methods' do
-    it '::current_weather_data', :VCR do
+    it '::credit_data', :vcr do
       image =  ImagesService.image_data("Denver,CO")
       result = ImagesFacade.credit_data(image)
 
@@ -15,7 +15,7 @@ describe 'Forecasts Facade' do
       expect(result[:attribution_link]).to be_a(String)
     end
 
-    it '::image_data', :VCR do
+    it '::image_data', :vcr do
       image =  ImagesService.image_data("Denver,CO")
       credit = ImagesFacade.credit_data(image)
       result = ImagesFacade.image_data(image, credit)
@@ -34,7 +34,7 @@ describe 'Forecasts Facade' do
       expect(result[:credit][:attribution_link]).to be_a(String)
     end
 
-    it '::background', :VCR do
+    it '::background', :vcr do
       image =  ImagesService.image_data("Denver,CO")
       credit = ImagesFacade.credit_data(image)
       image_and_credit = ImagesFacade.image_data(image, credit)

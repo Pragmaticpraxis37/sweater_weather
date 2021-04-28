@@ -2,14 +2,14 @@ require 'rails_helper'
 
 describe 'Trips Facade' do
   describe 'class methods - happy path' do
-    it '::start_city', :VCR do
+    it '::start_city', :vcr do
       trip_data = CoordinatesService.directions("Denver,CO", "Pueblo,CO")
       result = TripsFacade.start_city(trip_data[:route][:locations][0])
 
       expect(result).to eq("Denver, CO, US")
     end
 
-    it '::end_city', :VCR do
+    it '::end_city', :vcr do
       trip_data = CoordinatesService.directions("Denver,CO", "Pueblo,CO")
       result = TripsFacade.end_city(trip_data[:route][:locations][1])
 
@@ -71,21 +71,34 @@ describe 'Trips Facade' do
       expect(result[:conditions]).to eq("Your eta is outside of available conditions data.")
     end
 
-    it '::' do
+    it '::weather_at_destination will generate a message with hours and minutes for trips less than 172800 seconds', :vcr do
       trip_data = CoordinatesService.directions("Denver, CO", "Pueblo, CO ")
       trip_time_data = trip_data[:route][:realTime]
       dest_lat_and_lon = trip_data[:route][:locations][1][:latLng]
 
       weather_data = ForecastsService.forecast([dest_lat_and_lon[:lat], dest_lat_and_lon[:lng]])
-      @@hourly_data = weather_data[:hourly]
-      @@daily_data = weather_data[:daily]
 
+      result = TripsFacade.time(trip_time_data)
 
-      require "pry"; binding.pry
+      expect(result).to eq("2 hour(s) and 56 minutes")
+      expect(result).to be_a(String)
+    end
+
+    it '::weather_at_destination will generate a message with hours and minutes for trips less than 691200 seconds', :vcr do
+      trip_data = CoordinatesService.directions("Denver, CO", "Portland, OR")
+      trip_time_data = trip_data[:route][:realTime]
+      dest_lat_and_lon = trip_data[:route][:locations][1][:latLng]
+
+      weather_data = ForecastsService.forecast([dest_lat_and_lon[:lat], dest_lat_and_lon[:lng]])
+
+      result = TripsFacade.time(trip_time_data)
+
+      expect(result).to eq("20 hour(s) and 5 minutes")
+      expect(result).to be_a(String)
     end
   end
 
-  describe 'class methods - sad path', :VCR do
+  describe 'class methods - sad path', :vcr do
     it '::collection will trigger ::trip_impossible if only the destination is provided' do
       result = TripsFacade.collection("", "Pueblo,CO")
 
@@ -102,7 +115,7 @@ describe 'Trips Facade' do
       expect(result.weather_at_eta).to eq("")
     end
 
-    it '::collection will trigger ::trip_impossible if only the origin is provided', :VCR do
+    it '::collection will trigger ::trip_impossible if only the origin is provided', :vcr do
       result = TripsFacade.collection("Denver,CO", "")
 
       expect(result).to be_an(OpenStruct)
