@@ -17,4 +17,12 @@ describe 'Images Service' do
       end
     end
   end
+
+  describe 'class methods - sad path' do
+    it '::image_data returns an error messge if no location is provided' do
+      result = ImagesService.image_data("")
+
+      expect(result).to eq("Error search terms")
+    end
+  end
 end

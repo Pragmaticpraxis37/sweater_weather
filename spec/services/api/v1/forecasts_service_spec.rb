@@ -17,4 +17,17 @@ describe 'Forecasts Service' do
       end
     end
   end
+
+  describe 'class methods - sad path' do
+    it '::forecast returns a 400 and error if no coordinates are provided' do
+      result = ForecastsService.forecast("")
+
+      expect(result).to be_a(Hash)
+      expect(result.keys).to match_array [:cod, :message]
+      expect(result[:cod]).to be_a(String)
+      expect(result[:cod]).to eq("400")
+      expect(result[:message]).to be_a(String)
+      expect(result[:message]).to eq("Nothing to geocode")
+    end
+  end
 end
