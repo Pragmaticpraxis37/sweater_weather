@@ -1,5 +1,3 @@
-require 'ostruct' #check if necessary
-
 class Api::V1::ForecastsController < ActionController::API
   before_action :check_params
 

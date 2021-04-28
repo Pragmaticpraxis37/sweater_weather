@@ -1,5 +1,3 @@
-require 'ostruct'
-
 class Api::V1::ImagesController < ActionController::API
   before_action :check_params
 
@@ -7,10 +5,10 @@ class Api::V1::ImagesController < ActionController::API
     image_data = ImagesFacade.image(params[:location])
 
     if image_data == "Error search terms"
-      render json: {error: "Please provide search terms."}, status: 400
+      render json: {error: "Your search terms did not produce a result."}, status: 400
     else
       render json: ImageSerializer.new(image_data)
-    end 
+    end
   end
 
   private

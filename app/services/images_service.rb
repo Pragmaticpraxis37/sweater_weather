@@ -20,6 +20,6 @@ class ImagesService
       "Error search terms"
     else
       image_data
-    end 
+    end
   end
 end
