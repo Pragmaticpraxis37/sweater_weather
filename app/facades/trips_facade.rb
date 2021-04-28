@@ -14,6 +14,7 @@ class TripsFacade
     dest_lat_and_lon = trip_data[:route][:locations][1][:latLng]
 
     weather_data = ForecastsService.forecast([dest_lat_and_lon[:lat], dest_lat_and_lon[:lng]])
+
     @@hourly_data = weather_data[:hourly]
     @@daily_data = weather_data[:daily]
 
@@ -65,11 +66,9 @@ class TripsFacade
   end
 
   def self.daily_weather_at_destination(trip_time_data)
-    require "pry"; binding.pry
     day = ((trip_time_data / 86400) - 1)
     day_time = (trip_time_data / 86400.0).truncate(2)
     time_of_day = time_of_day(day_time)
-    require "pry"; binding.pry
     {temperature: @@daily_data[day][:temp][time_of_day[0]], conditions: @@daily_data[day][:weather][0][:description]}
   end
 
