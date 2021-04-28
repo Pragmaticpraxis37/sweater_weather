@@ -11,15 +11,12 @@ describe 'Users Requests - Create' do
               })
 
       headers = {"CONTENT_TYPE" => "application/json"}
-
-      post api_v1_users_path, headers: headers, params: body, as: :json
+      post(api_v1_users_path, {headers: headers, params: body, as: :json})
 
       expect(response).to be_successful
       expect(response.status).to eq(201)
 
       user = JSON.parse(response.body, symbolize_names: true)
-
-      # require "pry"; binding.pry
 
       expect(user).to be_a(Hash)
       expect(user.length).to eq(1)

@@ -8,13 +8,24 @@ describe 'Forecasts Service' do
       expect(connection).to be_a(Faraday::Connection)
     end
 
-    it '::forecast' do
-      VCR.use_cassette('Denver,CO_Forecast') do
-        result = ForecastsService.forecast([39.738453, -104.984853])
+    it '::forecast', :vcr do
+      result = ForecastsService.forecast([39.738453, -104.984853])
 
-        expect(result).to be_a(Hash)
-        expect(result.keys).to match_array [:lat, :lon, :timezone, :timezone_offset, :current, :minutely, :hourly, :daily]
-      end
+      expect(result).to be_a(Hash)
+      expect(result.keys).to match_array [:lat, :lon, :timezone, :timezone_offset, :current, :minutely, :hourly, :daily]
+    end
+  end
+
+  describe 'class methods - sad path', :vcr do
+    it '::forecast returns a 400 and error if no coordinates are provided' do
+      result = ForecastsService.forecast("")
+
+      expect(result).to be_a(Hash)
+      expect(result.keys).to match_array [:cod, :message]
+      expect(result[:cod]).to be_a(String)
+      expect(result[:cod]).to eq("400")
+      expect(result[:message]).to be_a(String)
+      expect(result[:message]).to eq("Nothing to geocode")
     end
   end
 end

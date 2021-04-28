@@ -8,13 +8,19 @@ describe 'Images Service' do
       expect(connection).to be_a(Faraday::Connection)
     end
 
-    it '::image_data' do
-      VCR.use_cassette('Denver,CO_Image') do
-        result = ImagesService.image_data("Denver,CO")
+    it '::image_data', :vcr do
+      result = ImagesService.image_data("Denver,CO")
 
-        expect(result).to be_a(Hash)
-        expect(result.keys).to match_array [:total, :total_pages, :results]
-      end
+      expect(result).to be_a(Hash)
+      expect(result.keys).to match_array [:total, :total_pages, :results]
+    end
+  end
+
+  describe 'class methods - sad path', :vcr do
+    it '::image_data returns an error messge if no location is provided' do
+      result = ImagesService.image_data("")
+
+      expect(result).to eq("Error search terms")
     end
   end
 end
