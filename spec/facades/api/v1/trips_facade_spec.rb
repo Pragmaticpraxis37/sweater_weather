@@ -2,14 +2,14 @@ require 'rails_helper'
 
 describe 'Trips Facade' do
   describe 'class methods - happy path' do
-    it '::start_city' do
+    it '::start_city', :VCR do
       trip_data = CoordinatesService.directions("Denver,CO", "Pueblo,CO")
       result = TripsFacade.start_city(trip_data[:route][:locations][0])
 
       expect(result).to eq("Denver, CO, US")
     end
 
-    it '::end_city' do
+    it '::end_city', :VCR do
       trip_data = CoordinatesService.directions("Denver,CO", "Pueblo,CO")
       result = TripsFacade.end_city(trip_data[:route][:locations][1])
 
@@ -58,9 +58,21 @@ describe 'Trips Facade' do
       expect(result.weather_at_eta[:conditions]).to eq("partly cloudy with a chance of meatballs")
       expect(result.weather_at_eta[:conditions]).to be_a(String)
     end
+
+    it '::weather_at_destination will generate messages saying no data is available if the seconds exceed 691200' do
+      result = TripsFacade.weather_at_destination(691201)
+
+      expect(result).to be_a(Hash)
+      expect(result.length).to eq(2)
+      expect(result.keys).to match_array [:temperature, :conditions]
+      expect(result[:temperature]).to be_a(String)
+      expect(result[:temperature]).to eq("Your eta is outside of available temperature data.")
+      expect(result[:conditions]).to be_a(String)
+      expect(result[:conditions]).to eq("Your eta is outside of available conditions data.")
+    end
   end
 
-  describe 'class methods - sad path' do
+  describe 'class methods - sad path', :VCR do
     it '::collection will trigger ::trip_impossible if only the destination is provided' do
       result = TripsFacade.collection("", "Pueblo,CO")
 
@@ -77,7 +89,7 @@ describe 'Trips Facade' do
       expect(result.weather_at_eta).to eq("")
     end
 
-    it '::collection will trigger ::trip_impossible if only the origin is provided' do
+    it '::collection will trigger ::trip_impossible if only the origin is provided', :VCR do
       result = TripsFacade.collection("Denver,CO", "")
 
       expect(result).to be_an(OpenStruct)

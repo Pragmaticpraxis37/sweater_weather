@@ -8,18 +8,16 @@ describe 'Coordinates Service' do
       expect(connection).to be_a(Faraday::Connection)
     end
 
-    it '::coordinates' do
-      VCR.use_cassette('Denver,CO_Forecast') do
-        result = CoordinatesService.coordinates("Denver,CO")
+    it '::coordinates', :VCR do
+      result = CoordinatesService.coordinates("Denver,CO")
 
-        expect(result).to be_an(Array)
-        expect(result.length).to eq(2)
-        expect(result[0]).to be_a(Float)
-        expect(result[1]).to be_a(Float)
-      end
+      expect(result).to be_an(Array)
+      expect(result.length).to eq(2)
+      expect(result[0]).to be_a(Float)
+      expect(result[1]).to be_a(Float)
     end
 
-    it '::directions' do
+    it '::directions', :VCR do
       result = CoordinatesService.directions("Denver,CO", "Pueblo,CO")
 
       expect(result).to be_an(Hash)
