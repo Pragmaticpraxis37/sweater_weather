@@ -10,6 +10,6 @@ jobs:
     steps:
       - checkout
       - run:
-          name: 2.2.8
+          name: sweater_weather
           command: bundle -v
       - ruby/bundle-install
