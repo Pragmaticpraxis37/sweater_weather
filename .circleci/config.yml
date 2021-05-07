@@ -6,6 +6,14 @@ jobs:
   build:
     docker:
       - image: circleci/ruby:2.5.3-stretch-node
+        environment:
+          BUNDLE_JOBS: 3
+          BUNDLE_PATH: vendor/bundle
+          BUNDLE_RETRY: 3
+          RAILS_ENV: test
+          DB_HOST: 127.0.0.1
+          PG_HOST: 127.0.0.1
+
     executor: ruby/default
     steps:
       - checkout
@@ -13,8 +21,6 @@ jobs:
           name: Install dependencies
           command: bundle -v
       - ruby/bundle-install
-      environment:
-        POSTGRES_DB: sweater_weather_test
       - run:
           name: Run tests
           command: bundle exec rspec
