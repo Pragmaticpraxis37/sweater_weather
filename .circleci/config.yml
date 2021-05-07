@@ -1,15 +1,15 @@
 version: 2.1
-orbs:
-  ruby: circleci/ruby@0.1.2
 
-jobs:
-  build:
+executors:
+  default:
+    # working_directory: ~/hix_postgresql
     docker:
-      - image: circleci/ruby:2.5.3-stretch-node
+      - image: circleci/ruby:2.5.3
         environment:
           BUNDLE_JOBS: 3
           BUNDLE_PATH: vendor/bundle
           BUNDLE_RETRY: 3
+          BUNDLER_VERSION: 2.2.8
           RAILS_ENV: test
           DB_HOST: 127.0.0.1
           PG_HOST: 127.0.0.1
@@ -17,13 +17,44 @@ jobs:
         environment:
           POSTGRES_DB: sweater_weather_test
 
-    executor: ruby/default
+commands:
+  configure_bundler:
+    description: Configure bundler
+    steps:
+      - run:
+          name: Configure bundler
+          command: |
+            echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
+            source $BASH_ENV
+            gem install bundler
+
+jobs:
+  build:
+    executor: default
     steps:
       - checkout
+      - configure_bundler
       - run:
-          name: Install dependencies
-          command: bundle -v
-      - ruby/bundle-install
+          name: Install bundle
+          command: bundle install
       - run:
-          name: Run tests
-          command: bundle exec rspec
+          name: Wait for DB
+          command: dockerize -wait tcp://127.0.0.1:5432 -timeout 1m
+      - run:
+          name: Setup DB
+          command: bundle exec rails db:create db:schema:load --trace
+workflows:
+  version: 2
+  integration:
+    jobs:
+      - build
+
+
+
+
+
+
+
+
+
+
