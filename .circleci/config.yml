@@ -13,8 +13,8 @@ jobs:
           name: Install dependencies
           command: bundle -v
       - ruby/bundle-install
-      - environment:
-          POSTGRES_DB: sweater_weather_test
+      environment:
+        POSTGRES_DB: sweater_weather_test
       - run:
           name: Run tests
           command: bundle exec rspec
