@@ -10,6 +10,9 @@ jobs:
     steps:
       - checkout
       - run:
-          name: sweater_weather
+          name: Install dependencies
           command: bundle -v
       - ruby/bundle-install
+      - run:
+          name: Run tests
+          command: bundle exec rspec

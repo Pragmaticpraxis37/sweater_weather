@@ -57,21 +57,21 @@ http_interactions:
       Accept-Ranges:
       - bytes
       Date:
-      - Wed, 28 Apr 2021 02:19:21 GMT
+      - Fri, 07 May 2021 12:56:30 GMT
       Age:
-      - '109'
+      - '0'
       X-Served-By:
-      - cache-dca17720-DCA, cache-den8283-DEN
+      - cache-dca17720-DCA, cache-den8227-DEN
       X-Cache:
       - MISS, HIT
       X-Cache-Hits:
       - 0, 1
       X-Timer:
-      - S1619576362.924178,VS0,VE1
+      - S1620392191.603778,VS0,VE80
       Vary:
       - Accept-Encoding, Origin,Authorization,client-geo-region
     body:
       encoding: ASCII-8BIT
       string: '{"total":0,"total_pages":0,"results":[]}'
-  recorded_at: Wed, 28 Apr 2021 02:19:21 GMT
+  recorded_at: Fri, 07 May 2021 12:56:30 GMT
 recorded_with: VCR 6.0.0
